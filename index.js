@@ -3,25 +3,37 @@ const app = express();
 const port = process.env.PORT || 8080;
 const calendarRouter = require('./src/domains/calendar/calendar.controller');
 
-const admin = require('firebase-admin');
 let name = "Stranger";
 
 
 
 
 try {
-    const serviceAccount = require('./service-account-key.json'); // Pfad prüfen!
 
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-    });
+    const admin = require('firebase-admin');
 
-    admin.firestore().settings({
+    if (!admin.apps.length) {
+        if (process.env.NODE_ENV === 'production') {
+            admin.initializeApp({
+                credential: admin.credential.applicationDefault(),
+            });
+        }
+        else {
+            const serviceAccount = require('./service-account-key.json');
+            admin.initializeApp({
+                credential: admin.credential.cert(serviceAccount),
+            });
+        }
+    }
+
+
+
+    const db = admin.firestore();
+    
+    db.settings({
         databaseId: 'transport-manager',
         ignoreUndefinedProperties: true
     });
-
-    const db = admin.firestore();
 
     app.use((req, res, next) => {
         req.db = db;
