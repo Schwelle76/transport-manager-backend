@@ -1,0 +1,9 @@
+runtime: nodejs20 # Wähle die gewünschte Node.js-Laufzeitumgebung
+# runtime: nodejs20 # Wenn du eine ältere Version nutzt, passe dies an (z.B. nodejs18)
+
+# Optional: Konfiguration der Instanzen und Skalierung (für den Standard-App Engine Environment)
+instance_class: F1 # Der kleinste und günstigste Instanztyp
+
+automatic_scaling:
+  min_instances: 0 
+  max_instances: 2
