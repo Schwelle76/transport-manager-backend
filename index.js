@@ -3,12 +3,30 @@ const app = express();
 const port = process.env.PORT || 8080;
 const calendarRouter = require('./src/domains/calendar/calendar.controller');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
+
 
 let name = "Stranger";
 
 
 
+
+
 app.use(cors());
+
+
+// Limiter-Konfiguration: 
+// Erlaubt maximal 100 Anfragen pro IP-Adresse in einem Zeitraum von 15 Minuten
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 Minuten
+    max: 100, // Limit pro IP
+    standardHeaders: true, 
+    legacyHeaders: false,
+    message: 'Too many requests. Please try again later.'
+});
+
+// Wenden Sie den Limiter auf Ihre API-Routen an
+app.use('/api/', apiLimiter);
 
 
 try {
