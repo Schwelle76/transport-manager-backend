@@ -2,10 +2,13 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 8080;
 const calendarRouter = require('./src/domains/calendar/calendar.controller');
+const cors = require('cors');
 
 let name = "Stranger";
 
 
+
+app.use(cors());
 
 
 try {
@@ -29,7 +32,7 @@ try {
 
 
     const db = admin.firestore();
-    
+
     db.settings({
         databaseId: 'transport-manager',
         ignoreUndefinedProperties: true
